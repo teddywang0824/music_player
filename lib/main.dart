@@ -39,7 +39,28 @@ class Home extends StatelessWidget {
           IconButton(onPressed: (){}, icon: const Icon(Icons.add)),
         ],
       ),
-      body: MusicList(),
+      body: AudioDownload(),
+    );
+  }
+}
+
+class AudioDownload extends StatelessWidget {
+  const AudioDownload({super.key});
+  
+
+  @override
+  Widget build(BuildContext context){
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        TextField(
+          decoration: const InputDecoration(
+            labelText: '輸入 Youtube 網址',
+          ),
+        ),
+        const SizedBox(height: 20,),
+        TextButton(onPressed: (){}, child: const Text("送出")),
+      ],
     );
   }
 }
