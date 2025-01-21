@@ -12,6 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -34,6 +35,9 @@ class Home extends StatelessWidget {
           "My Music List",
           style: TextStyle(fontSize: 18),
         ),
+        actions: [
+          IconButton(onPressed: (){}, icon: const Icon(Icons.add)),
+        ],
       ),
       body: MusicList(),
     );
