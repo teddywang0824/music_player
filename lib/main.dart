@@ -44,9 +44,16 @@ class Home extends StatelessWidget {
   }
 }
 
-class AudioDownload extends StatelessWidget {
-  AudioDownload({super.key});
+class AudioDownload extends StatefulWidget {
+  const AudioDownload({super.key});
+
+  @override
+  State<AudioDownload> createState() => _AudioDownloadState();
+}
+
+class _AudioDownloadState extends State<AudioDownload> {
   final TextEditingController _urlController = TextEditingController();
+  String _status = '';
 
   @override
   Widget build(BuildContext context){
@@ -60,14 +67,18 @@ class AudioDownload extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 20,),
-        TextButton(onPressed: (){
+        ElevatedButton(onPressed: (){
           _testPathProvider();
           debugPrint("-----你輸入的是 ${_urlController.text}-----");
+          setState(() {
+            _status = '喔是喔';
+          });
         }, child: const Text("送出")),
+        Text(_status),
       ],
     );
   }
-  
+
   Future<void> _testPathProvider() async {
     var dir = await getApplicationDocumentsDirectory();
     debugPrint("---${dir.path}---");
