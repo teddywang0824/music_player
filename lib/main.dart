@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'view/musiclist.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -8,7 +9,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -45,8 +45,8 @@ class Home extends StatelessWidget {
 }
 
 class AudioDownload extends StatelessWidget {
-  const AudioDownload({super.key});
-  
+  AudioDownload({super.key});
+  final TextEditingController _urlController = TextEditingController();
 
   @override
   Widget build(BuildContext context){
@@ -54,13 +54,22 @@ class AudioDownload extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         TextField(
+          controller: _urlController,
           decoration: const InputDecoration(
             labelText: '輸入 Youtube 網址',
           ),
         ),
         const SizedBox(height: 20,),
-        TextButton(onPressed: (){}, child: const Text("送出")),
+        TextButton(onPressed: (){
+          _testPathProvider();
+          debugPrint("-----你輸入的是 ${_urlController.text}-----");
+        }, child: const Text("送出")),
       ],
     );
+  }
+  
+  Future<void> _testPathProvider() async {
+    var dir = await getApplicationDocumentsDirectory();
+    debugPrint("---${dir.path}---");
   }
 }
