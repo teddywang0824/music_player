@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -12,15 +13,18 @@ class MusicList extends StatefulWidget {
 class _MusicListState extends State<MusicList> {
   List<String> fileNames = [];
   String states = '讀取中...';
+  late StreamSubscription _dirSreamSubscription;
 
   @override
   void initState() {
     super.initState();
     _loadFileNames();
+    _startDirWatch();
   }
 
   @override
   void dispose() {
+    _dirSreamSubscription.cancel();
     super.dispose();
   }
 
@@ -58,5 +62,11 @@ class _MusicListState extends State<MusicList> {
     } catch (e) {
       setState(() => states = "發生錯誤 : $e");
     }
+  }
+  
+  Future<void> _startDirWatch() async {
+    var dir = await getExternalStorageDirectory();
+    
+    _dirSreamSubscription = dir!.watch(events: FileSystemEvent.all).listen((event) => _loadFileNames());
   }
 }
