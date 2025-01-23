@@ -40,7 +40,26 @@ class _MusicListState extends State<MusicList> {
                 leading: const Icon(Icons.music_note),
                 trailing: const Icon(Icons.play_arrow),
                 onTap: () {},
-                onLongPress: () {},
+                onLongPress: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return SimpleDialog(
+                          children: [
+                            SimpleDialogOption(
+                              child: Text("刪除音樂"),
+                              onPressed: () {
+                                _deleteIndex(index);
+                                Navigator.pop(context);
+                              },
+                            ),
+                            SimpleDialogOption(
+                              child: Text("修改音樂名稱"),
+                            ),
+                          ],
+                        );
+                      });
+                },
               );
             });
   }
@@ -63,10 +82,26 @@ class _MusicListState extends State<MusicList> {
       setState(() => states = "發生錯誤 : $e");
     }
   }
-  
+
   Future<void> _startDirWatch() async {
     var dir = await getExternalStorageDirectory();
-    
-    _dirSreamSubscription = dir!.watch(events: FileSystemEvent.all).listen((event) => _loadFileNames());
+
+    _dirSreamSubscription = dir!
+        .watch(events: FileSystemEvent.all)
+        .listen((event) => _loadFileNames());
+  }
+  
+  Future<void> _deleteIndex(int index) async {
+    var dir = await getExternalStorageDirectory();
+    String name = fileNames[index];
+    final file = File('${dir!.path}/$name');
+
+    if(await file.exists()) {
+      await file.delete();
+
+      setState(() {
+        fileNames.removeAt(index);
+      });
+    }
   }
 }
