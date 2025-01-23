@@ -47,14 +47,43 @@ class _MusicListState extends State<MusicList> {
                         return SimpleDialog(
                           children: [
                             SimpleDialogOption(
-                              child: Text("刪除音樂"),
+                              child: const Text("刪除音樂"),
                               onPressed: () {
                                 _deleteIndex(index);
                                 Navigator.pop(context);
                               },
                             ),
                             SimpleDialogOption(
-                              child: Text("修改音樂名稱"),
+                              child: const Text("修改音樂名稱"),
+                              onPressed: () {
+                                TextEditingController _nameController =
+                                    TextEditingController(text: fileNames[index]);
+                                Navigator.pop(context);
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return Dialog(
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            const Text("請輸入新的名稱"),
+                                            TextField(
+                                              controller: _nameController,
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                _modifyIndex(index,
+                                                    _nameController.text);
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text("修改"),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    });
+                                
+                              },
                             ),
                           ],
                         );
@@ -90,17 +119,31 @@ class _MusicListState extends State<MusicList> {
         .watch(events: FileSystemEvent.all)
         .listen((event) => _loadFileNames());
   }
-  
+
   Future<void> _deleteIndex(int index) async {
     var dir = await getExternalStorageDirectory();
     String name = fileNames[index];
     final file = File('${dir!.path}/$name');
 
-    if(await file.exists()) {
+    if (await file.exists()) {
       await file.delete();
 
       setState(() {
         fileNames.removeAt(index);
+      });
+    }
+  }
+
+  Future<void> _modifyIndex(int index, String newName) async {
+    var dir = await getExternalStorageDirectory();
+    String name = fileNames[index];
+    final file = File('${dir!.path}/$name');
+
+    if (await file.exists()) {
+      await file.rename('${dir.path}/$newName');
+
+      setState(() {
+        fileNames[index] = newName;
       });
     }
   }
