@@ -22,6 +22,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
   late List<String> playlist;
 
   late AudioPlayer _audioPlayer;
+  Duration _duration = Duration.zero;
+  Duration _position = Duration.zero;
 
   bool _isPlaying = false;
 
@@ -54,14 +56,15 @@ class _PlayerScreenState extends State<PlayerScreen> {
             height: 20,
           ),
           Slider(
-            value: 0.5,
+            value: _position.inSeconds.toDouble(),
+            max: _duration.inSeconds.toDouble(),
             onChanged: (double value) {},
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("00:00"),
-              Text("00:00"),
+              Text(_formatDuration(_position)),
+              Text(_formatDuration(_duration)),
             ],
           ),
           Stack(
@@ -97,8 +100,23 @@ class _PlayerScreenState extends State<PlayerScreen> {
   Future<void> _iniAudio() async {
     try {
       await _audioPlayer.setFilePath("$targetDir/${playlist[playerlistIndex]}");
+      _audioPlayer.durationStream.listen((d) {
+        setState(() => _duration = d ?? Duration.zero);
+      });
+      _audioPlayer.positionStream.listen((p) {
+        setState(() => _position = p);
+      });
     } catch (e) {
       debugPrint("音樂初始化失敗");
     }
+  }
+  
+  String _formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+
+    final minutes = twoDigits(duration.inMinutes);
+    final seconds = twoDigits(duration.inSeconds % 60);
+
+    return "$minutes:$seconds";
   }
 }
