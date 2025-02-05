@@ -6,18 +6,36 @@ class PlayerScreen extends StatefulWidget {
   final List<String> fileNameList;
   final int nowIndex;
 
-  const PlayerScreen({
-    super.key,
-    required this.filePath,
-    required this.fileNameList,
-    required this.nowIndex
-  });
+  const PlayerScreen(
+      {super.key,
+      required this.filePath,
+      required this.fileNameList,
+      required this.nowIndex});
 
   @override
   State<PlayerScreen> createState() => _PlayerScreenState();
 }
 
 class _PlayerScreenState extends State<PlayerScreen> {
+  late String targetDir;
+  late int playerlistIndex;
+  late List<String> playlist;
+
+  late AudioPlayer _audioPlayer;
+
+  bool _isPlaying = false;
+
+  @override
+  void initState() {
+    super.initState();
+    targetDir = widget.filePath;
+    playerlistIndex = widget.nowIndex;
+    playlist = widget.fileNameList;
+    _audioPlayer = AudioPlayer();
+
+    _iniAudio();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +46,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "歌曲名",
+            playlist[playerlistIndex],
             style: const TextStyle(fontSize: 20),
             textAlign: TextAlign.center,
           ),
@@ -54,7 +72,18 @@ class _PlayerScreenState extends State<PlayerScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(onPressed: () {}, icon: Icon(Icons.skip_previous)),
-                  IconButton(onPressed: () {}, icon: Icon(Icons.pause)),
+                  IconButton(
+                      onPressed: () async {
+                        setState(() {
+                          _isPlaying = !_isPlaying;
+                        });
+                        if (_isPlaying) {
+                          await _audioPlayer.play();
+                        } else {
+                          await _audioPlayer.pause();
+                        }
+                      },
+                      icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow)),
                   IconButton(onPressed: () {}, icon: Icon(Icons.skip_next)),
                 ],
               ),
@@ -63,5 +92,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> _iniAudio() async {
+    try {
+      await _audioPlayer.setFilePath("$targetDir/${playlist[playerlistIndex]}");
+    } catch (e) {
+      debugPrint("音樂初始化失敗");
+    }
   }
 }
