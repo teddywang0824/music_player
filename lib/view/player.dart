@@ -58,7 +58,10 @@ class _PlayerScreenState extends State<PlayerScreen> {
           Slider(
             value: _position.inSeconds.toDouble(),
             max: _duration.inSeconds.toDouble(),
-            onChanged: (double value) {},
+            onChanged: (double value) async {
+              final position = Duration(seconds: value.toInt());
+              await _audioPlayer.seek(position);
+            },
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
