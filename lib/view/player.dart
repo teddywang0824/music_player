@@ -2,7 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
 class PlayerScreen extends StatefulWidget {
-  const PlayerScreen({super.key});
+  final String filePath;
+  final List<String> fileNameList;
+  final int nowIndex;
+
+  const PlayerScreen({
+    super.key,
+    required this.filePath,
+    required this.fileNameList,
+    required this.nowIndex
+  });
 
   @override
   State<PlayerScreen> createState() => _PlayerScreenState();

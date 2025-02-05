@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
+import 'player.dart';
 
 class MusicList extends StatefulWidget {
   const MusicList({super.key});
@@ -39,7 +40,10 @@ class _MusicListState extends State<MusicList> {
                 title: Text(fileNames[index]),
                 leading: const Icon(Icons.music_note),
                 trailing: const Icon(Icons.play_arrow),
-                onTap: () {},
+                onTap: () async {
+                  var dir = await getExternalStorageDirectory();
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => PlayerScreen(filePath: dir!.path, fileNameList: fileNames, nowIndex: index)));
+                },
                 onLongPress: () {
                   showDialog(
                       context: context,

@@ -49,7 +49,7 @@ class Home extends StatelessWidget {
         ],
       ),
       // body: const MusicList(),
-      body: const PlayerScreen(),
+      body: const MusicList(),
     );
   }
 }
