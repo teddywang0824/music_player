@@ -26,6 +26,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   Duration _position = Duration.zero;
 
   bool _isPlaying = false;
+  bool _isReplay = false;
 
   @override
   void initState() {
@@ -37,12 +38,16 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
     _iniAudio();
 
-    _audioPlayer.playerStateStream.listen((state){
-      if(state.processingState == ProcessingState.completed){
-        setState(() {
-          playerlistIndex = (playerlistIndex == playlist.length - 1) ? 0 : playerlistIndex + 1;
-          _iniAudio();
-        });
+    _audioPlayer.playerStateStream.listen((state) {
+      if (state.processingState == ProcessingState.completed) {
+        if (!_isReplay) {
+          setState(() {
+            playerlistIndex = (playerlistIndex == playlist.length - 1)
+                ? 0
+                : playerlistIndex + 1;
+          });
+        }
+        _iniAudio();
       }
     });
   }
@@ -82,7 +87,12 @@ class _PlayerScreenState extends State<PlayerScreen> {
           Stack(
             children: [
               IconButton(
-                  onPressed: () {}, icon: Icon(Icons.replay_circle_filled)),
+                  onPressed: () {
+                    setState(() {
+                      _isReplay = !_isReplay;
+                    });
+                  },
+                  icon: _isReplay ? const Icon(Icons.replay_circle_filled) : const Icon(Icons.replay)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
