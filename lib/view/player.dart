@@ -77,7 +77,16 @@ class _PlayerScreenState extends State<PlayerScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  IconButton(onPressed: () {}, icon: Icon(Icons.skip_previous)),
+                  IconButton(
+                      onPressed: () {
+                        setState(() {
+                          playerlistIndex = (playerlistIndex == 0)
+                              ? playlist.length - 1
+                              : playerlistIndex - 1;
+                        });
+                        _iniAudio();
+                      },
+                      icon: const Icon(Icons.skip_previous)),
                   IconButton(
                       onPressed: () async {
                         setState(() {
@@ -90,7 +99,17 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         }
                       },
                       icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow)),
-                  IconButton(onPressed: () {}, icon: Icon(Icons.skip_next)),
+                  IconButton(
+                      onPressed: () {
+                        setState(() {
+                          playerlistIndex =
+                              (playerlistIndex == playlist.length - 1)
+                                  ? 0
+                                  : playerlistIndex + 1;
+                        });
+                        _iniAudio();
+                      },
+                      icon: const Icon(Icons.skip_next)),
                 ],
               ),
             ],
@@ -113,7 +132,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
       debugPrint("音樂初始化失敗");
     }
   }
-  
+
   String _formatDuration(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, "0");
 
