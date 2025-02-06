@@ -36,6 +36,15 @@ class _PlayerScreenState extends State<PlayerScreen> {
     _audioPlayer = AudioPlayer();
 
     _iniAudio();
+
+    _audioPlayer.playerStateStream.listen((state){
+      if(state.processingState == ProcessingState.completed){
+        setState(() {
+          playerlistIndex = (playerlistIndex == playlist.length - 1) ? 0 : playerlistIndex + 1;
+          _iniAudio();
+        });
+      }
+    });
   }
 
   @override
