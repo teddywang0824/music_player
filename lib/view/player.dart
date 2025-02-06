@@ -53,6 +53,12 @@ class _PlayerScreenState extends State<PlayerScreen> {
   }
 
   @override
+  void dispose(){
+    super.dispose();
+    _audioPlayer.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
