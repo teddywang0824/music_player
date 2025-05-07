@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
-// import 'package:permission_handler/permission_handler.dart';
 import 'dart:io';
 
 class AudioDownload extends StatefulWidget {
@@ -58,10 +57,6 @@ class _AudioDownloadState extends State<AudioDownload> {
     });
 
     try {
-      // var state = await Permission.storage.request();
-      // if(!state.isGranted) {
-      //   throw '需要儲存權限';
-      // }
 
       final yt = YoutubeExplode();
 

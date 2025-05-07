@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'view/audiodownload.dart';
 import 'view/musiclist.dart';
-import 'view/player.dart';
 
 void main() {
   runApp(const MyApp());
