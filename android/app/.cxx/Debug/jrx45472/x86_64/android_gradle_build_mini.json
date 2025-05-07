@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "D:\\androidDeveloper\\flutter\\packages\\flutter_tools\\gradle\\src\\main\\groovy\\CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "D:\\androidDeveloper\\Android\\SDK\\cmake\\3.22.1\\bin\\ninja.exe",
+      "-C",
+      "D:\\CodeProject\\flutter_project\\my_music_player\\android\\app\\.cxx\\Debug\\jrx45472\\x86_64",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "D:\\androidDeveloper\\Android\\SDK\\cmake\\3.22.1\\bin\\ninja.exe",
+    "-C",
+    "D:\\CodeProject\\flutter_project\\my_music_player\\android\\app\\.cxx\\Debug\\jrx45472\\x86_64",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}

@@ -48,7 +48,6 @@ class Home extends StatelessWidget {
               icon: const Icon(Icons.add)),
         ],
       ),
-      // body: const MusicList(),
       body: const MusicList(),
     );
   }
