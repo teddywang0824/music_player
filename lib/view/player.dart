@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import '../services/audio_player_service.dart';
-import '../utils/time_formatter.dart';
 
 class PlayerScreen extends StatefulWidget {
   final String filePath;
@@ -74,86 +73,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("音樂撥放器"),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            playlist[playerlistIndex],
-            style: const TextStyle(fontSize: 20),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 20),
-          Slider(
-            value: _position.inSeconds.toDouble(),
-            max: _duration.inSeconds.toDouble(),
-            onChanged: (double value) async {
-              final position = Duration(seconds: value.toInt());
-              await _audioService.seek(position);
-            },
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(formatDuration(_position)),
-              Text(formatDuration(_duration)),
-            ],
-          ),
-          IconButton(
-            onPressed: () {
-              setState(() {
-                _isReplay = !_isReplay;
-              });
-            },
-            icon: _isReplay 
-                ? const Icon(Icons.replay_circle_filled) 
-                : const Icon(Icons.replay)
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    playerlistIndex = (playerlistIndex == 0)
-                        ? playlist.length - 1
-                        : playerlistIndex - 1;
-                  });
-                  _initPlayer();
-                },
-                icon: const Icon(Icons.skip_previous)
-              ),
-              IconButton(
-                onPressed: () async {
-                  setState(() {
-                    _isPlaying = !_isPlaying;
-                  });
-                  if (_isPlaying) {
-                    await _audioService.play();
-                  } else {
-                    await _audioService.pause();
-                  }
-                },
-                icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow)
-              ),
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    playerlistIndex = (playerlistIndex == playlist.length - 1)
-                        ? 0
-                        : playerlistIndex + 1;
-                  });
-                  _initPlayer();
-                },
-                icon: const Icon(Icons.skip_next)
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+    return Placeholder();
   }
 }

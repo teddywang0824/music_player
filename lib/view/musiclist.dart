@@ -32,49 +32,7 @@ class _MusicListState extends State<MusicList> {
 
   @override
   Widget build(BuildContext context) {
-    return fileNames.isEmpty
-        ? Center(child: Text(states))
-        : ListView.builder(
-            itemCount: fileNames.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(fileNames[index]),
-                leading: const Icon(Icons.music_note),
-                trailing: const Icon(Icons.play_arrow),
-                onTap: () async {
-                  var dir = await _fileService.getDirectoryPath();
-                  Navigator.push(
-                    context, 
-                    MaterialPageRoute(
-                      builder: (context) => PlayerScreen(
-                        filePath: dir, 
-                        fileNameList: fileNames, 
-                        nowIndex: index
-                      )
-                    )
-                  );
-                },
-                onLongPress: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return SimpleDialog(
-                        children: [
-                          SimpleDialogOption(
-                            child: const Text("刪除音樂"),
-                            onPressed: () {
-                              _deleteIndex(index);
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ],
-                      );
-                    }
-                  );
-                },
-              );
-            },
-          );
+    return Placeholder();
   }
 
   Future<void> _loadFileNames() async {
