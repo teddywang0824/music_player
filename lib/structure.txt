@@ -1,0 +1,5 @@
+lib/
+├── main.dart             # Entry point
+├── views/                # UI screens
+├── services/             # Business logic and API calls
+├── utils/                # Helper functions

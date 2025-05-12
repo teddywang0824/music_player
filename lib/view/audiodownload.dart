@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
-import 'dart:io';
+import '../services/youtube_download_service.dart';
 
 class AudioDownload extends StatefulWidget {
   const AudioDownload({super.key});
@@ -12,8 +10,16 @@ class AudioDownload extends StatefulWidget {
 
 class _AudioDownloadState extends State<AudioDownload> {
   final TextEditingController _urlController = TextEditingController();
+  final YoutubeDownloadService _downloadService = YoutubeDownloadService();
   String _status = ''; //指示
   bool _isLoading = false;
+
+  @override
+  void dispose() {
+    _urlController.dispose();
+    _downloadService.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,19 +36,16 @@ class _AudioDownloadState extends State<AudioDownload> {
                 labelText: '輸入 Youtube 網址',
               ),
             ),
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
             ElevatedButton(
-                onPressed: _isLoading
-                    ? null
-                    : () {
-                        _download(_urlController.text);
-                      },
-                child: Text(_isLoading ? "處理中" : "下載")),
-            const SizedBox(
-              height: 20,
+              onPressed: _isLoading
+                ? null
+                : () {
+                    _download(_urlController.text);
+                  },
+              child: Text(_isLoading ? "處理中" : "下載")
             ),
+            const SizedBox(height: 20),
             Text(_status),
           ],
         ),
@@ -51,38 +54,23 @@ class _AudioDownloadState extends State<AudioDownload> {
   }
 
   Future<void> _download(String url) async {
+    if (url.isEmpty) {
+      setState(() => _status = '請輸入網址');
+      return;
+    }
+
     setState(() {
       _isLoading = true;
-      _status = '開始下載，請勿關閉...';
+      _status = '準備下載...';
     });
 
     try {
-
-      final yt = YoutubeExplode();
-
-      final video = await yt.videos.get(url);
-      final videoTitle = video.title;
-
-      var manifest = await yt.videos.streams.getManifest(url);
-      var audio = manifest.audioOnly.withHighestBitrate();
-
-      var dir = await getExternalStorageDirectory();
-      setState(() => _status = '下載中，請勿關閉...');
-      debugPrint(dir!.path);
-
-      var stream = yt.videos.streams.get(audio);
-      final file = File('${dir.path}/$videoTitle.mp3');
-
-      var fileStream = file.openWrite();
-
-      await stream.pipe(fileStream);
-      await fileStream.flush;
-      await fileStream.close();
-      yt.close();
-
-      setState(() => _status = "已經下載完成");
-    } catch (e) {
-      setState(() => _status = '錯誤: $e');
+      final result = await _downloadService.downloadAudio(
+        url, 
+        (status) => setState(() => _status = status)
+      );
+      
+      setState(() => _status = result);
     } finally {
       setState(() => _isLoading = false);
       Navigator.pop(context);
