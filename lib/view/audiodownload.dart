@@ -23,7 +23,34 @@ class _AudioDownloadState extends State<AudioDownload> {
 
   @override
   Widget build(BuildContext context) {
-    return Placeholder();
+    return SizedBox(
+      height: 200,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              controller: _urlController,
+              decoration: const InputDecoration(
+                labelText: '輸入 Youtube 網址',
+              ),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _isLoading
+                ? null
+                : () {
+                    _download(_urlController.text);
+                  },
+              child: Text(_isLoading ? "處理中" : "下載")
+            ),
+            const SizedBox(height: 20),
+            Text(_status),
+          ],
+        ),
+      ),
+    );
   }
 
   Future<void> _download(String url) async {

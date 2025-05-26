@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'view/audiodownload.dart';
+import 'view/musiclist.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: true,
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -26,6 +28,26 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text(
+          "My Music List",
+          style: TextStyle(fontSize: 18),
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                showDialog(context: context, builder: (context) {
+                  return const Dialog(
+                    child: AudioDownload(),
+                  );
+                });
+              },
+              icon: const Icon(Icons.add)),
+        ],
+      ),
+      body: const MusicList(),
+    );
   }
 }
